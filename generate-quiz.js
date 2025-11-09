@@ -1340,7 +1340,15 @@ function createQuestion4(ppt) {
     x: 1.2, y: 0.35, w: 8, h: 0.4, fontSize: 18, color: colors.primary, bold: true
   });
 
-  const answerY = 1.8, boxHeight = 1;
+  // Show the 3 BASE CUBES at the top
+  slide.addText("Given shapes:", {
+    x: 1, y: 0.9, w: 2, h: 0.3, fontSize: 14, color: colors.text, italic: true
+  });
+  drawCube(slide, 1, 1.15, 0.45, colors.shapeCorrect);
+  drawCube(slide, 1.7, 1.15, 0.45, colors.shapeCorrect);
+  drawCube(slide, 2.4, 1.15, 0.45, colors.shapeCorrect);
+
+  const answerY = 2.2, boxHeight = 1.3;
 
   // Answer A - Single cube
   slide.addShape("rect", { x: 0.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
@@ -1388,7 +1396,15 @@ function createReveal4(ppt) {
     x: 2.2, y: 0.35, w: 7, h: 0.4, fontSize: 18, color: colors.primary, bold: true
   });
 
-  const answerY = 1.8, boxHeight = 1;
+  // Show the 3 BASE CUBES
+  slide.addText("Given shapes:", {
+    x: 1, y: 0.9, w: 2, h: 0.3, fontSize: 14, color: colors.text, italic: true
+  });
+  drawCube(slide, 1, 1.15, 0.45, colors.shapeCorrect);
+  drawCube(slide, 1.7, 1.15, 0.45, colors.shapeCorrect);
+  drawCube(slide, 2.4, 1.15, 0.45, colors.shapeCorrect);
+
+  const answerY = 2.2, boxHeight = 1.3;
 
   // Answer B - CORRECT
   slide.addShape("rect", { x: 5.2, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.correctBg }, line: { color: colors.correct, width: 3 } });
@@ -1407,14 +1423,27 @@ function createReveal4(ppt) {
 // QUESTIONS 5-15 (Simplified for now)
 // ========================================
 
-function createQuestionYesNo(ppt, qNum, question, correctAnswer, revealSlide) {
+function createQuestionYesNo(ppt, qNum, question, correctAnswer, revealSlide, showShapes = false) {
   const slide = ppt.addSlide();
   slide.background = { color: colors.surface };
   addQuestionHeader(slide, qNum);
 
   slide.addText(question, { x: 1.2, y: 0.35, w: 8, h: 0.5, fontSize: 18, color: colors.primary, bold: true });
 
-  const answerY = 2.5, boxHeight = 1;
+  // Show shapes if needed (for Q5)
+  if (showShapes && qNum === 5) {
+    // Shape A: Triangle + Rectangle
+    slide.addText("Shape A:", { x: 1, y: 1.2, w: 1.5, h: 0.3, fontSize: 14, color: colors.text, bold: true });
+    drawTriangle(slide, 1.2, 1.5, 0.5, colors.shapeCorrect);
+    drawRectangle(slide, 1.5, 1.7, 0.6, 0.3, colors.shapeCorrect);
+
+    // Shape B: Different configuration
+    slide.addText("Shape B:", { x: 3.5, y: 1.2, w: 1.5, h: 0.3, fontSize: 14, color: colors.text, bold: true });
+    drawRectangle(slide, 3.7, 1.5, 0.8, 0.5, colors.shapeCorrect);
+  }
+
+  const answerY = showShapes ? 2.8 : 2.5;
+  const boxHeight = 1;
   const yesColor = correctAnswer === "Yes" ? colors.shapeCorrect : colors.shapeIncorrect;
   const noColor = correctAnswer === "No" ? colors.shapeCorrect : colors.shapeIncorrect;
 
@@ -1469,24 +1498,66 @@ function createRevealYesNo(ppt, qNum, question, correctAnswer, nextSlide) {
   slide.addText("Next Question →", { x: 7.5, y: 5, w: 2, h: 0.5, fontSize: 14, bold: true, color: "FFFFFF", align: "center", valign: "middle", hyperlink: { slide: nextSlide } });
 }
 
-// Create remaining questions (simplified versions for now)
-function createRemainingQuestions(ppt) {
-  // Q5 - Decomposition Yes/No (Answer: No/B)
-  createQuestionYesNo(ppt, 5, "Can the parts of Shape A be used to make Shape B?", "No", 10);
-  createRevealYesNo(ppt, 5, "Can the parts of Shape A be used to make Shape B?", "No", 11);
+// ========================================
+// QUESTION 6: Hexagon + Triangle Transformation
+// ========================================
 
-  // Q6-Q7 would be transformation questions - using generic 4-option format
-  // Q8 - Yes/No Decomposition (Answer: Yes/A)
-  createQuestionYesNo(ppt, 8, "Can the parts of Shape A be used to make Shape B? (Diamond shape)", "Yes", 16);
-  createRevealYesNo(ppt, 8, "Can the parts of Shape A be used to make Shape B? (Diamond shape)", "Yes", 17);
+function create4OptionGeneric(ppt, qNum, question, options, correctIndex, revealSlide, nextSlide) {
+  // Question slide
+  const qSlide = ppt.addSlide();
+  qSlide.background = { color: colors.surface };
+  addQuestionHeader(qSlide, qNum);
+  qSlide.addText(question, { x: 1.2, y: 0.35, w: 8, h: 0.4, fontSize: 18, color: colors.primary, bold: true });
 
-  // Q12 - Cone to Pyramid (Answer: No/B)
-  createQuestionYesNo(ppt, 12, "Can you make Shape B from Shape A? (Cone → Pyramid)", "No", 24);
-  createRevealYesNo(ppt, 12, "Can you make Shape B from Shape A? (Cone → Pyramid)", "No", 25);
+  const answerY = 1.8, boxHeight = 1.1;
 
-  // Q13 - T-Shaped Blocks (Answer: No/B)
-  createQuestionYesNo(ppt, 13, "Can you make Shape B from Shape A? (T-shaped blocks)", "No", 26);
-  createRevealYesNo(ppt, 13, "Can you make Shape B from Shape A? (T-shaped blocks)", "No", 27);
+  // Answer A
+  const isACorrect = correctIndex === 0;
+  qSlide.addShape("rect", { x: 0.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  qSlide.addText("A", { x: 0.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: isACorrect ? colors.shapeCorrect : colors.shapeIncorrect }, align: "center", valign: "middle" });
+  qSlide.addText(options[0], { x: 1, y: answerY + 0.4, w: 3.5, h: 0.5, fontSize: 12, color: colors.text, align: "center", valign: "middle" });
+
+  // Answer B
+  const isBCorrect = correctIndex === 1;
+  qSlide.addShape("rect", { x: 5.2, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  qSlide.addText("B", { x: 5.3, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: isBCorrect ? colors.shapeCorrect : colors.shapeIncorrect }, align: "center", valign: "middle" });
+  qSlide.addText(options[1], { x: 5.7, y: answerY + 0.4, w: 3.5, h: 0.5, fontSize: 12, color: colors.text, align: "center", valign: "middle" });
+
+  // Answer C
+  const answerY2 = answerY + boxHeight + 0.2;
+  const isCCorrect = correctIndex === 2;
+  qSlide.addShape("rect", { x: 0.5, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  qSlide.addText("C", { x: 0.6, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: isCCorrect ? colors.shapeCorrect : colors.shapeIncorrect }, align: "center", valign: "middle" });
+  qSlide.addText(options[2], { x: 1, y: answerY2 + 0.4, w: 3.5, h: 0.5, fontSize: 12, color: colors.text, align: "center", valign: "middle" });
+
+  // Answer D
+  const isDCorrect = correctIndex === 3;
+  qSlide.addShape("rect", { x: 5.2, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  qSlide.addText("D", { x: 5.3, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: isDCorrect ? colors.shapeCorrect : colors.shapeIncorrect }, align: "center", valign: "middle" });
+  qSlide.addText(options[3], { x: 5.7, y: answerY2 + 0.4, w: 3.5, h: 0.5, fontSize: 12, color: colors.text, align: "center", valign: "middle" });
+
+  // Clickable areas
+  [{ x: 0.5, y: answerY }, { x: 5.2, y: answerY }, { x: 0.5, y: answerY2 }, { x: 5.2, y: answerY2 }].forEach(area => {
+    qSlide.addShape("rect", { ...area, w: 4.2, h: boxHeight, fill: { color: "000000", transparency: 100 }, line: { width: 0 }, hyperlink: { slide: revealSlide } });
+  });
+
+  // Reveal slide
+  const rSlide = ppt.addSlide();
+  rSlide.background = { color: colors.surface };
+  addRevealHeader(rSlide, qNum);
+  rSlide.addText(question, { x: 2.2, y: 0.35, w: 7, h: 0.4, fontSize: 18, color: colors.primary, bold: true });
+
+  const correctLetter = ["A", "B", "C", "D"][correctIndex];
+  const yPos = correctIndex < 2 ? answerY : answerY2;
+  const xPos = (correctIndex % 2 === 0) ? 0.5 : 5.2;
+
+  rSlide.addShape("rect", { x: xPos, y: yPos, w: 4.2, h: boxHeight, fill: { color: colors.correctBg }, line: { color: colors.correct, width: 3 } });
+  rSlide.addText(correctLetter, { x: xPos + 0.1, y: yPos + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.correct }, align: "center", valign: "middle" });
+  rSlide.addText("✓ " + options[correctIndex], { x: xPos + 0.5, y: yPos + 0.4, w: 3.5, h: 0.5, fontSize: 12, color: colors.correct, bold: true, align: "center", valign: "middle" });
+
+  // Next button
+  rSlide.addShape("rect", { x: 7.5, y: 5, w: 2, h: 0.5, fill: { color: colors.secondary }, line: { width: 0 } });
+  rSlide.addText("Next Question →", { x: 7.5, y: 5, w: 2, h: 0.5, fontSize: 14, bold: true, color: "FFFFFF", align: "center", valign: "middle", hyperlink: { slide: nextSlide } });
 }
 
 // ========================================
@@ -1558,49 +1629,48 @@ createQuestion4(ppt);
 createReveal4(ppt);
 
 // Q5 + R5
-createQuestionYesNo(ppt, 5, "Can the parts of Shape A be used to make Shape B?", "No", 10);
+createQuestionYesNo(ppt, 5, "Can the parts of Shape A be used to make Shape B?", "No", 10, true);
 createRevealYesNo(ppt, 5, "Can the parts of Shape A be used to make Shape B?", "No", 11);
 
-// Q6-Q15 + Reveals (Simplified placeholders - will be detailed based on feedback)
-// Q6 - Transformation (Answer: B)
-createQuestionYesNo(ppt, 6, "Transformation: Hexagon + Triangle - Can you make this new shape?", "Yes", 12);
-createRevealYesNo(ppt, 6, "Transformation: Hexagon + Triangle - Can you make this new shape?", "Yes", 13);
+// Q6 - Transformation: Hexagon + Triangle (Answer: B)
+create4OptionGeneric(ppt, 6, "How can you make a different shape using the same parts? (Hexagon + Triangle)",
+  ["Transformation 1", "Transformation 2 (Correct)", "Transformation 3", "Transformation 4"], 1, 12, 13);
 
-// Q7 - Transformation (Answer: C - using placeholder)
-createQuestionYesNo(ppt, 7, "Transformation: Parallelogram + Square - Can you rearrange?", "No", 14);
-createRevealYesNo(ppt, 7, "Transformation: Parallelogram + Square - Can you rearrange?", "No", 15);
+// Q7 - Transformation: Parallelogram + Square (Answer: C)
+create4OptionGeneric(ppt, 7, "How can you make a different shape using the same parts? (Parallelogram + Square)",
+  ["Transformation 1", "Transformation 2", "Transformation 3 (Correct)", "Transformation 4"], 2, 14, 15);
 
-// Q8 + R8
+// Q8 - Yes/No Decomposition (Answer: A/Yes)
 createQuestionYesNo(ppt, 8, "Can the parts of Shape A be used to make Shape B? (Diamond shape)", "Yes", 16);
 createRevealYesNo(ppt, 8, "Can the parts of Shape A be used to make Shape B? (Diamond shape)", "Yes", 17);
 
-// Q9 - Attribute Matching (simplified as yes/no)
-createQuestionYesNo(ppt, 9, "Does the shape have fewer than 4 sides?", "Yes", 18);
-createRevealYesNo(ppt, 9, "Does the shape have fewer than 4 sides?", "Yes", 19);
+// Q9 - Attribute Matching (Answer: D)
+create4OptionGeneric(ppt, 9, "How do you know the shape is NOT a rectangle? Match with one reason only.",
+  ["Shape is not closed", "Shape has more than 4 sides", "Shape is not 2-dimensional", "Shape has fewer than 4 sides (Correct)"], 3, 18, 19);
 
-// Q10 - Rectangle from L-Shape
-createQuestionYesNo(ppt, 10, "Can you make a rectangle from this L-shaped figure?", "Yes", 20);
-createRevealYesNo(ppt, 10, "Can you make a rectangle from this L-shaped figure?", "Yes", 21);
+// Q10 - Rectangle from L-Shape (Answer: C)
+create4OptionGeneric(ppt, 10, "How can you use the parts of this shape to make a rectangle? (L-shaped figure)",
+  ["Configuration 1", "Configuration 2", "Configuration 3 (Correct)", "Configuration 4"], 2, 20, 21);
 
-// Q11 - Cylinder + Cone
-createQuestionYesNo(ppt, 11, "Can you stack Cylinder + Cone to make this shape?", "Yes", 22);
-createRevealYesNo(ppt, 11, "Can you stack Cylinder + Cone to make this shape?", "Yes", 23);
+// Q11 - Cylinder + Cone (Answer: A)
+create4OptionGeneric(ppt, 11, "Put all the shapes together. Circle the shape they can make. (Cylinder + Cone)",
+  ["Stacked cylinder and cone (Correct)", "Merged into sphere", "Separate shapes", "Different configuration"], 0, 22, 23);
 
-// Q12 + R12
+// Q12 + R12 - Cone to Pyramid (Answer: B/No)
 createQuestionYesNo(ppt, 12, "Can you make Shape B from Shape A? (Cone → Pyramid)", "No", 24);
 createRevealYesNo(ppt, 12, "Can you make Shape B from Shape A? (Cone → Pyramid)", "No", 25);
 
-// Q13 + R13
+// Q13 + R13 - T-Shaped Blocks (Answer: B/No)
 createQuestionYesNo(ppt, 13, "Can you make Shape B from Shape A? (T-shaped blocks)", "No", 26);
 createRevealYesNo(ppt, 13, "Can you make Shape B from Shape A? (T-shaped blocks)", "No", 27);
 
-// Q14 - Real-World 3D Shapes
-createQuestionYesNo(ppt, 14, "Are these 3-dimensional shapes? (Pencil, Box, Basketball)", "Yes", 28);
-createRevealYesNo(ppt, 14, "Are these 3-dimensional shapes? (Pencil, Box, Basketball)", "Yes", 29);
+// Q14 - Real-World 3D Shapes (Answer: B)
+create4OptionGeneric(ppt, 14, "What 3 items around you are 3-dimensional shapes?",
+  ["Ball=Sphere, Cup=Cylinder, Book=Cube", "Pencil=Cylinder, Box=Rectangular Prism, Basketball=Sphere (Correct)", "Hat=Cone, Can=Cube, Ball=Circle", "Block=Rectangular Prism, Apple=Sphere, Crayon=Prism"], 1, 28, 29);
 
-// Q15 - Animal Composition (using Q2 style - will need to create specific function)
-createQuestion2(ppt); // Placeholder - reusing Q2 structure
-createReveal2(ppt);   // Placeholder
+// Q15 - Animal Composition (Answer: C - DIFFERENT from Q2)
+create4OptionGeneric(ppt, 15, "Draw how to make an animal using shapes. Which shows a correct animal?",
+  ["Animal arrangement 1", "Animal arrangement 2", "Animal arrangement 3 (Correct)", "Animal arrangement 4"], 2, 30, 31);
 
 // Answer Key (Slide 31)
 createAnswerKey(ppt);
