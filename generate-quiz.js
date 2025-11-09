@@ -436,21 +436,29 @@ function createQuestion1(ppt) {
     bold: true
   });
 
-  // Reference diagram at top
-  slide.addText("Box | Pot | Shaker | Cabbage | Hat", {
-    x: 1,
-    y: 1,
-    w: 8,
-    h: 0.3,
-    fontSize: 12,
-    color: colors.text,
-    italic: true,
-    align: "center"
-  });
+  // Display shapes ONCE at top with labels (in correct answer order as hint)
+  // Box, Pot, Shaker, Cabbage, Hat
+  const shapeY = 1.0;
+  const shapeSpacing = 1.6;
 
-  // Answer options with shapes
-  const answerY = 1.5;
-  const boxHeight = 1.1;
+  // Box = Rectangular Prism
+  drawRectangularPrism(slide, 0.7, shapeY, 0.5, 0.35, colors.shapeCorrect, "Box");
+
+  // Pot = Cylinder
+  drawCylinder(slide, 0.7 + shapeSpacing, shapeY - 0.05, 0.4, 0.45, colors.shapeCorrect, "Pot");
+
+  // Shaker = Cone
+  drawCone(slide, 0.7 + shapeSpacing * 2, shapeY - 0.05, 0.4, 0.45, colors.shapeCorrect, "Shaker");
+
+  // Cabbage = Sphere
+  drawSphere(slide, 0.7 + shapeSpacing * 3, shapeY, 0.45, colors.shapeCorrect, "Cabbage");
+
+  // Hat = Cone
+  drawCone(slide, 0.7 + shapeSpacing * 4, shapeY - 0.05, 0.4, 0.45, colors.shapeCorrect, "Hat");
+
+  // Answer options - TEXT ONLY (no shape icons)
+  const answerY = 2.5;
+  const boxHeight = 0.75;
 
   // Answer A - INCORRECT
   slide.addShape("rect", {
@@ -473,19 +481,16 @@ function createQuestion1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("Box=Cube, Pot=Cylinder, Shaker=Cone, Cabbage=Sphere, Hat=Cone", {
+  slide.addText("Cube, Cylinder, Cone, Sphere, Cone", {
     x: 1,
-    y: answerY + 0.15,
+    y: answerY + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
-    color: colors.text
+    h: 0.4,
+    fontSize: 13,
+    color: colors.text,
+    align: "left",
+    valign: "middle"
   });
-  // Add small shape icons for A
-  drawCube(slide, 1, answerY + 0.5, 0.3, colors.shapeIncorrect);
-  drawCylinder(slide, 1.5, answerY + 0.45, 0.35, 0.3, colors.shapeIncorrect);
-  drawCone(slide, 2, answerY + 0.45, 0.35, 0.3, colors.shapeIncorrect);
-  drawSphere(slide, 2.5, answerY + 0.5, 0.3, colors.shapeIncorrect);
 
   // Answer B - CORRECT
   slide.addShape("rect", {
@@ -508,19 +513,16 @@ function createQuestion1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("Box=Rectangular Prism, Pot=Cylinder,\nShaker=Cone, Cabbage=Sphere, Hat=Cone", {
+  slide.addText("Rectangular Prism, Cylinder, Cone, Sphere, Cone", {
     x: 5.7,
-    y: answerY + 0.15,
+    y: answerY + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
-    color: colors.text
+    h: 0.4,
+    fontSize: 13,
+    color: colors.text,
+    align: "left",
+    valign: "middle"
   });
-  // Add small shape icons for B
-  drawRectangularPrism(slide, 5.8, answerY + 0.55, 0.4, 0.3, colors.shapeCorrect);
-  drawCylinder(slide, 6.4, answerY + 0.5, 0.35, 0.3, colors.shapeCorrect);
-  drawCone(slide, 6.9, answerY + 0.5, 0.35, 0.3, colors.shapeCorrect);
-  drawSphere(slide, 7.4, answerY + 0.55, 0.3, colors.shapeCorrect);
 
   // Answer C - INCORRECT
   const answerY2 = answerY + boxHeight + 0.2;
@@ -544,19 +546,16 @@ function createQuestion1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("Box=Rectangular Prism, Pot=Sphere,\nShaker=Cylinder, Cabbage=Cube, Hat=Cone", {
+  slide.addText("Rectangular Prism, Sphere, Cylinder, Cube, Cone", {
     x: 1,
-    y: answerY2 + 0.15,
+    y: answerY2 + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
-    color: colors.text
+    h: 0.4,
+    fontSize: 13,
+    color: colors.text,
+    align: "left",
+    valign: "middle"
   });
-  // Add small shape icons for C
-  drawRectangularPrism(slide, 1, answerY2 + 0.55, 0.4, 0.3, colors.shapeIncorrect);
-  drawSphere(slide, 1.6, answerY2 + 0.55, 0.3, colors.shapeIncorrect);
-  drawCylinder(slide, 2.1, answerY2 + 0.5, 0.35, 0.3, colors.shapeIncorrect);
-  drawCube(slide, 2.6, answerY2 + 0.5, 0.3, colors.shapeIncorrect);
 
   // Answer D - INCORRECT
   slide.addShape("rect", {
@@ -579,19 +578,16 @@ function createQuestion1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("Box=Cube, Pot=Cylinder, Shaker=Cube,\nCabbage=Ball, Hat=Triangle", {
+  slide.addText("Cube, Cylinder, Cube, Ball, Triangle", {
     x: 5.7,
-    y: answerY2 + 0.15,
+    y: answerY2 + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
-    color: colors.text
+    h: 0.4,
+    fontSize: 13,
+    color: colors.text,
+    align: "left",
+    valign: "middle"
   });
-  // Add small shape icons for D
-  drawCube(slide, 5.8, answerY2 + 0.5, 0.3, colors.shapeIncorrect);
-  drawCylinder(slide, 6.3, answerY2 + 0.45, 0.35, 0.3, colors.shapeIncorrect);
-  drawSphere(slide, 6.8, answerY2 + 0.5, 0.3, colors.shapeIncorrect);
-  drawTriangle(slide, 7.3, answerY2 + 0.5, 0.3, colors.shapeIncorrect);
 
   // Clickable areas - all link to reveal slide (slide 2)
   slide.addShape("rect", {
@@ -652,20 +648,28 @@ function createReveal1(ppt) {
     bold: true
   });
 
-  // Reference diagram
-  slide.addText("Box | Pot | Shaker | Cabbage | Hat", {
-    x: 1,
-    y: 1,
-    w: 8,
-    h: 0.3,
-    fontSize: 12,
-    color: colors.text,
-    italic: true,
-    align: "center"
-  });
+  // Display shapes at top (same as question slide)
+  const shapeY = 1.0;
+  const shapeSpacing = 1.6;
 
-  const answerY = 1.5;
-  const boxHeight = 1.1;
+  // Box = Rectangular Prism
+  drawRectangularPrism(slide, 0.7, shapeY, 0.5, 0.35, colors.shapeCorrect, "Box");
+
+  // Pot = Cylinder
+  drawCylinder(slide, 0.7 + shapeSpacing, shapeY - 0.05, 0.4, 0.45, colors.shapeCorrect, "Pot");
+
+  // Shaker = Cone
+  drawCone(slide, 0.7 + shapeSpacing * 2, shapeY - 0.05, 0.4, 0.45, colors.shapeCorrect, "Shaker");
+
+  // Cabbage = Sphere
+  drawSphere(slide, 0.7 + shapeSpacing * 3, shapeY, 0.45, colors.shapeCorrect, "Cabbage");
+
+  // Hat = Cone
+  drawCone(slide, 0.7 + shapeSpacing * 4, shapeY - 0.05, 0.4, 0.45, colors.shapeCorrect, "Hat");
+
+  // Answer options - TEXT ONLY
+  const answerY = 2.5;
+  const boxHeight = 0.75;
 
   // Answer A - INCORRECT (dimmed)
   slide.addShape("rect", {
@@ -688,13 +692,15 @@ function createReveal1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("Box=Cube, Pot=Cylinder, Shaker=Cone, Cabbage=Sphere, Hat=Cone", {
+  slide.addText("Cube, Cylinder, Cone, Sphere, Cone", {
     x: 1,
-    y: answerY + 0.15,
+    y: answerY + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
-    color: "888888"
+    h: 0.4,
+    fontSize: 13,
+    color: "888888",
+    align: "left",
+    valign: "middle"
   });
 
   // Answer B - CORRECT (highlighted in green)
@@ -718,20 +724,17 @@ function createReveal1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("✓ Box=Rectangular Prism, Pot=Cylinder,\nShaker=Cone, Cabbage=Sphere, Hat=Cone", {
+  slide.addText("✓ Rectangular Prism, Cylinder, Cone, Sphere, Cone", {
     x: 5.7,
-    y: answerY + 0.15,
+    y: answerY + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
+    h: 0.4,
+    fontSize: 13,
     color: colors.correct,
-    bold: true
+    bold: true,
+    align: "left",
+    valign: "middle"
   });
-  // Add shape icons for correct answer
-  drawRectangularPrism(slide, 5.8, answerY + 0.55, 0.4, 0.3, colors.shapeCorrect);
-  drawCylinder(slide, 6.4, answerY + 0.5, 0.35, 0.3, colors.shapeCorrect);
-  drawCone(slide, 6.9, answerY + 0.5, 0.35, 0.3, colors.shapeCorrect);
-  drawSphere(slide, 7.4, answerY + 0.55, 0.3, colors.shapeCorrect);
 
   // Answer C - INCORRECT (dimmed)
   const answerY2 = answerY + boxHeight + 0.2;
@@ -755,13 +758,15 @@ function createReveal1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("Box=Rectangular Prism, Pot=Sphere,\nShaker=Cylinder, Cabbage=Cube, Hat=Cone", {
+  slide.addText("Rectangular Prism, Sphere, Cylinder, Cube, Cone", {
     x: 1,
-    y: answerY2 + 0.15,
+    y: answerY2 + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
-    color: "888888"
+    h: 0.4,
+    fontSize: 13,
+    color: "888888",
+    align: "left",
+    valign: "middle"
   });
 
   // Answer D - INCORRECT (dimmed)
@@ -785,13 +790,15 @@ function createReveal1(ppt) {
     align: "center",
     valign: "middle"
   });
-  slide.addText("Box=Cube, Pot=Cylinder, Shaker=Cube,\nCabbage=Ball, Hat=Triangle", {
+  slide.addText("Cube, Cylinder, Cube, Ball, Triangle", {
     x: 5.7,
-    y: answerY2 + 0.15,
+    y: answerY2 + 0.2,
     w: 3.5,
-    h: 0.8,
-    fontSize: 11,
-    color: "888888"
+    h: 0.4,
+    fontSize: 13,
+    color: "888888",
+    align: "left",
+    valign: "middle"
   });
 
   // Next question button
@@ -830,13 +837,22 @@ function drawAnimal1(slide, x, y, scale, color) {
 }
 
 function drawAnimal2(slide, x, y, scale, color) {
-  // Animal 2: oval body + circle head + triangle ears
+  // CAT: circle head + two triangle ears + rectangle body + four legs
+  // Head (circle)
   drawCircle(slide, x + 0.15 * scale, y, 0.35 * scale, color);
-  drawRectangle(slide, x, y + 0.25 * scale, 0.6 * scale, 0.4 * scale, color);
-  drawTriangle(slide, x + 0.05 * scale, y - 0.05 * scale, 0.15 * scale, color);
-  drawTriangle(slide, x + 0.3 * scale, y - 0.05 * scale, 0.15 * scale, color);
-  drawRectangle(slide, x + 0.05 * scale, y + 0.6 * scale, 0.12 * scale, 0.25 * scale, color);
-  drawRectangle(slide, x + 0.4 * scale, y + 0.6 * scale, 0.12 * scale, 0.25 * scale, color);
+
+  // Two triangle ears on top of head
+  drawTriangle(slide, x + 0.12 * scale, y - 0.08 * scale, 0.15 * scale, color);
+  drawTriangle(slide, x + 0.28 * scale, y - 0.08 * scale, 0.15 * scale, color);
+
+  // Body (rectangle)
+  drawRectangle(slide, x, y + 0.28 * scale, 0.6 * scale, 0.35 * scale, color);
+
+  // Four legs (rectangles)
+  drawRectangle(slide, x + 0.05 * scale, y + 0.6 * scale, 0.1 * scale, 0.3 * scale, color);
+  drawRectangle(slide, x + 0.2 * scale, y + 0.6 * scale, 0.1 * scale, 0.3 * scale, color);
+  drawRectangle(slide, x + 0.3 * scale, y + 0.6 * scale, 0.1 * scale, 0.3 * scale, color);
+  drawRectangle(slide, x + 0.45 * scale, y + 0.6 * scale, 0.1 * scale, 0.3 * scale, color);
 }
 
 function drawAnimal3(slide, x, y, scale, color) {
