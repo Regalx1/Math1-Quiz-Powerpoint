@@ -1610,23 +1610,23 @@ function createQuestion6(ppt) {
   // Answer A - Use PNG image
   slide.addShape("rect", { x: 0.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("A", { x: 0.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q6-answer-a.png", x: 1.5, y: answerY + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q6-answer-a.png", x: 1.5, y: answerY + 0.2, w: 2.5, h: 1.0 });
 
   // Answer B - Use PNG image (CORRECT)
   slide.addShape("rect", { x: 5.2, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("B", { x: 5.3, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeCorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q6-answer-b.png", x: 6.2, y: answerY + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q6-answer-b.png", x: 6.2, y: answerY + 0.2, w: 2.5, h: 1.0 });
 
   // Answer C - Use PNG image
   const answerY2 = answerY + boxHeight + 0.2;
   slide.addShape("rect", { x: 0.5, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("C", { x: 0.6, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q6-answer-c.png", x: 1.5, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q6-answer-c.png", x: 1.5, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
 
   // Answer D - Use PNG image
   slide.addShape("rect", { x: 5.2, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("D", { x: 5.3, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q6-answer-d.png", x: 6.2, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q6-answer-d.png", x: 6.2, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
 
   // Clickable areas
   [{ x: 0.5, y: answerY }, { x: 5.2, y: answerY }, { x: 0.5, y: answerY2 }, { x: 5.2, y: answerY2 }].forEach(area => {
@@ -1649,7 +1649,7 @@ function createReveal6(ppt) {
   slide.addShape("rect", { x: 3.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.correctBg }, line: { color: colors.correct, width: 3 } });
   slide.addText("B", { x: 3.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.correct }, align: "center", valign: "middle" });
   slide.addText("✓ Correct Answer", { x: 4.0, y: answerY + 0.1, w: 3.5, h: 0.3, fontSize: 14, color: colors.correct, bold: true });
-  slide.addImage({ path: "q6-answer-b.png", x: 4.5, y: answerY + 0.4, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q6-answer-b.png", x: 4.5, y: answerY + 0.4, w: 2.5, h: 1.0 });
 
   // Next button
   slide.addShape("rect", { x: 7.5, y: 5, w: 2, h: 0.5, fill: { color: colors.secondary }, line: { width: 0 } });
@@ -1677,23 +1677,23 @@ function createQuestion7(ppt) {
   // Answer A - Use PNG image
   slide.addShape("rect", { x: 0.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("A", { x: 0.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q7-answer-a.png", x: 1.5, y: answerY + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q7-answer-a.png", x: 1.5, y: answerY + 0.2, w: 2.5, h: 1.0 });
 
   // Answer B - Use PNG image
   slide.addShape("rect", { x: 5.2, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("B", { x: 5.3, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q7-answer-b.png", x: 6.2, y: answerY + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q7-answer-b.png", x: 6.2, y: answerY + 0.2, w: 2.5, h: 1.0 });
 
   // Answer C - Use PNG image (CORRECT)
   const answerY2 = answerY + boxHeight + 0.2;
   slide.addShape("rect", { x: 0.5, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("C", { x: 0.6, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeCorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q7-answer-c.png", x: 1.5, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q7-answer-c.png", x: 1.5, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
 
   // Answer D - Use PNG image
   slide.addShape("rect", { x: 5.2, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
   slide.addText("D", { x: 5.3, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
-  slide.addImage({ path: "q7-answer-d.png", x: 6.2, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q7-answer-d.png", x: 6.2, y: answerY2 + 0.2, w: 2.5, h: 1.0 });
 
   // Clickable areas
   [{ x: 0.5, y: answerY }, { x: 5.2, y: answerY }, { x: 0.5, y: answerY2 }, { x: 5.2, y: answerY2 }].forEach(area => {
@@ -1716,7 +1716,7 @@ function createReveal7(ppt) {
   slide.addShape("rect", { x: 3.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.correctBg }, line: { color: colors.correct, width: 3 } });
   slide.addText("C", { x: 3.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.correct }, align: "center", valign: "middle" });
   slide.addText("✓ Correct Answer", { x: 4.0, y: answerY + 0.1, w: 3.5, h: 0.3, fontSize: 14, color: colors.correct, bold: true });
-  slide.addImage({ path: "q7-answer-c.png", x: 4.5, y: answerY + 0.4, w: 2.5, h: 1.0 });
+  slide.addImage({ path: "previews/q7-answer-c.png", x: 4.5, y: answerY + 0.4, w: 2.5, h: 1.0 });
 
   // Next button
   slide.addShape("rect", { x: 7.5, y: 5, w: 2, h: 0.5, fill: { color: colors.secondary }, line: { width: 0 } });

@@ -67,7 +67,7 @@ def create_q6_answers():
     draw = ImageDraw.Draw(img)
     draw_hexagon(draw, 150, 150, 50, COLORS['shapeIncorrect'])
     draw_triangle(draw, 210, 135, 55, COLORS['shapeIncorrect'], rotation=90)
-    img.save('q6-answer-a.png')
+    img.save('previews/q6-answer-a.png')
 
     # Answer B - Triangle on top (CORRECT)
     img = Image.new('RGB', (400, 300), (30, 30, 30, 0))
@@ -75,7 +75,7 @@ def create_q6_answers():
     draw = ImageDraw.Draw(img)
     draw_hexagon(draw, 200, 200, 50, COLORS['shapeCorrect'])
     draw_triangle(draw, 185, 120, 60, COLORS['shapeCorrect'], rotation=180)
-    img.save('q6-answer-b.png')
+    img.save('previews/q6-answer-b.png')
 
     # Answer C - Triangle on bottom-left edge
     img = Image.new('RGB', (400, 300), (30, 30, 30, 0))
@@ -83,7 +83,7 @@ def create_q6_answers():
     draw = ImageDraw.Draw(img)
     draw_hexagon(draw, 200, 120, 50, COLORS['shapeIncorrect'])
     draw_triangle(draw, 150, 180, 55, COLORS['shapeIncorrect'], rotation=240)
-    img.save('q6-answer-c.png')
+    img.save('previews/q6-answer-c.png')
 
     # Answer D - Triangle on bottom edge
     img = Image.new('RGB', (400, 300), (30, 30, 30, 0))
@@ -91,7 +91,7 @@ def create_q6_answers():
     draw = ImageDraw.Draw(img)
     draw_hexagon(draw, 200, 120, 50, COLORS['shapeIncorrect'])
     draw_triangle(draw, 185, 185, 60, COLORS['shapeIncorrect'], rotation=0)
-    img.save('q6-answer-d.png')
+    img.save('previews/q6-answer-d.png')
 
     print("✓ Created Q6 answer images (A, B, C, D)")
 
@@ -105,7 +105,7 @@ def create_q7_answers():
     draw = ImageDraw.Draw(img)
     draw_parallelogram(draw, 120, 130, 100, 60, 25, COLORS['shapeIncorrect'])
     draw_square(draw, 220, 125, 60, COLORS['shapeIncorrect'])
-    img.save('q7-answer-a.png')
+    img.save('previews/q7-answer-a.png')
 
     # Answer B - Square on left edge
     img = Image.new('RGB', (400, 300), (30, 30, 30, 0))
@@ -113,7 +113,7 @@ def create_q7_answers():
     draw = ImageDraw.Draw(img)
     draw_square(draw, 120, 125, 60, COLORS['shapeIncorrect'])
     draw_parallelogram(draw, 180, 130, 100, 60, 25, COLORS['shapeIncorrect'])
-    img.save('q7-answer-b.png')
+    img.save('previews/q7-answer-b.png')
 
     # Answer C - Stacked vertically (CORRECT)
     img = Image.new('RGB', (400, 300), (30, 30, 30, 0))
@@ -121,7 +121,7 @@ def create_q7_answers():
     draw = ImageDraw.Draw(img)
     draw_parallelogram(draw, 150, 100, 100, 60, 25, COLORS['shapeCorrect'])
     draw_square(draw, 165, 165, 60, COLORS['shapeCorrect'])
-    img.save('q7-answer-c.png')
+    img.save('previews/q7-answer-c.png')
 
     # Answer D - Square on top
     img = Image.new('RGB', (400, 300), (30, 30, 30, 0))
@@ -129,7 +129,7 @@ def create_q7_answers():
     draw = ImageDraw.Draw(img)
     draw_square(draw, 165, 90, 60, COLORS['shapeIncorrect'])
     draw_parallelogram(draw, 150, 155, 100, 60, 25, COLORS['shapeIncorrect'])
-    img.save('q7-answer-d.png')
+    img.save('previews/q7-answer-d.png')
 
     print("✓ Created Q7 answer images (A, B, C, D)")
 
