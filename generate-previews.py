@@ -30,15 +30,36 @@ def draw_hexagon(draw, x, y, size, fill_color, outline_color='#000000'):
         points.append((px, py))
     draw.polygon(points, fill=hex_to_rgb(fill_color), outline=hex_to_rgb(outline_color), width=2)
 
-def draw_triangle(draw, x, y, size, fill_color, outline_color='#000000'):
-    """Draw an equilateral triangle pointing up"""
+def draw_triangle(draw, x, y, size, fill_color, outline_color='#000000', rotation=0):
+    """Draw an equilateral triangle pointing up, with optional rotation in degrees"""
     h = size * math.sqrt(3) / 2
+    # Original points (pointing up)
     points = [
-        (x, y),
-        (x + size, y),
-        (x + size/2, y + h)
+        (0, 0),
+        (size, 0),
+        (size/2, h)
     ]
-    draw.polygon(points, fill=hex_to_rgb(fill_color), outline=hex_to_rgb(outline_color), width=2)
+
+    # Rotate if needed
+    if rotation != 0:
+        angle = math.radians(rotation)
+        cos_a, sin_a = math.cos(angle), math.sin(angle)
+        cx, cy = size/2, h/2  # Center point
+        rotated_points = []
+        for px, py in points:
+            # Translate to origin
+            px_centered = px - cx
+            py_centered = py - cy
+            # Rotate
+            new_x = px_centered * cos_a - py_centered * sin_a
+            new_y = px_centered * sin_a + py_centered * cos_a
+            # Translate back
+            rotated_points.append((new_x + cx, new_y + cy))
+        points = rotated_points
+
+    # Translate to position
+    final_points = [(x + px, y + py) for px, py in points]
+    draw.polygon(final_points, fill=hex_to_rgb(fill_color), outline=hex_to_rgb(outline_color), width=2)
 
 def draw_parallelogram(draw, x, y, width, height, skew, fill_color, outline_color='#000000'):
     """Draw a parallelogram"""
@@ -83,41 +104,45 @@ def create_q6_preview():
     draw_triangle(draw, 280, 130, 60, COLORS['shapeCorrect'])
     draw.text((285, 210), "Triangle", fill=hex_to_rgb(COLORS['text']), font=None)
 
-    # Answer A - Transformation 1 (hexagon on left, triangle on right)
+    # Answer A - Triangle attached to right edge of hexagon (rotated 90° right)
     draw.rectangle([50, 280, 600, 430], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([60, 290, 100, 330], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((70, 300), "A", fill=(255, 255, 255), font=None)
-    draw_hexagon(draw, 250, 350, 30, COLORS['shapeIncorrect'])
-    draw_triangle(draw, 340, 330, 45, COLORS['shapeIncorrect'])
+    # Hexagon centered at 250, 350
+    draw_hexagon(draw, 250, 350, 35, COLORS['shapeIncorrect'])
+    # Triangle rotated 90° and attached to right edge of hexagon
+    # Hexagon right edge is at x=250+35, triangle needs to point right
+    draw_triangle(draw, 285, 340, 40, COLORS['shapeIncorrect'], rotation=90)
 
-    # Answer B - Transformation 2 CORRECT (triangle on top of hexagon, touching not clipping)
+    # Answer B - Triangle attached to TOP flat edge of hexagon (CORRECT)
     draw.rectangle([630, 280, 1180, 430], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([640, 290, 680, 330], fill=hex_to_rgb(COLORS['shapeCorrect']))
     draw.text((650, 300), "B", fill=(255, 255, 255), font=None)
     # Hexagon centered
-    draw_hexagon(draw, 850, 370, 30, COLORS['shapeCorrect'])
-    # Triangle positioned above hexagon - bottom edge touching top of hexagon
-    # Hexagon top is at y=370-30=340, triangle height is ~52 (60*sqrt(3)/2)
-    # So triangle should start at y=340-52=288
-    draw_triangle(draw, 820, 288, 60, COLORS['shapeCorrect'])
+    draw_hexagon(draw, 850, 360, 35, COLORS['shapeCorrect'])
+    # Triangle pointing up, attached to top edge
+    # Top of hexagon is roughly at 360-30, triangle base should align
+    draw_triangle(draw, 845, 295, 40, COLORS['shapeCorrect'], rotation=180)
 
-    # Answer C - Transformation 3 (triangle below hexagon)
+    # Answer C - Triangle attached to bottom-left edge (rotated 240°)
     draw.rectangle([50, 450, 600, 600], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([60, 460, 100, 500], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((70, 470), "C", fill=(255, 255, 255), font=None)
-    draw_hexagon(draw, 250, 500, 30, COLORS['shapeIncorrect'])
-    draw_triangle(draw, 220, 540, 60, COLORS['shapeIncorrect'])
+    draw_hexagon(draw, 250, 525, 35, COLORS['shapeIncorrect'])
+    # Triangle on lower left edge
+    draw_triangle(draw, 215, 545, 40, COLORS['shapeIncorrect'], rotation=240)
 
-    # Answer D - Transformation 4 (side by side touching)
+    # Answer D - Triangle attached to bottom edge (rotated 180°, pointing down)
     draw.rectangle([630, 450, 1180, 600], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([640, 460, 680, 500], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((650, 470), "D", fill=(255, 255, 255), font=None)
-    draw_hexagon(draw, 820, 520, 30, COLORS['shapeIncorrect'])
-    draw_triangle(draw, 870, 500, 45, COLORS['shapeIncorrect'])
+    draw_hexagon(draw, 850, 515, 35, COLORS['shapeIncorrect'])
+    # Triangle pointing down, attached to bottom
+    draw_triangle(draw, 845, 550, 40, COLORS['shapeIncorrect'], rotation=0)
 
     img.save('preview-q6.png')
     print("✓ Created preview-q6.png")
@@ -140,38 +165,45 @@ def create_q7_preview():
     draw_square(draw, 320, 130, 50, COLORS['shapeCorrect'])
     draw.text((325, 200), "Square", fill=hex_to_rgb(COLORS['text']), font=None)
 
-    # Answer A - Transformation 1 (horizontal arrangement - use same dimensions)
+    # Answer A - Square attached to RIGHT slanted edge of parallelogram
     draw.rectangle([50, 280, 600, 430], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([60, 290, 100, 330], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((70, 300), "A", fill=(255, 255, 255), font=None)
-    draw_parallelogram(draw, 200, 340, 80, 50, 20, COLORS['shapeIncorrect'])
-    draw_square(draw, 300, 340, 50, COLORS['shapeIncorrect'])
+    # Parallelogram
+    draw_parallelogram(draw, 210, 340, 80, 50, 20, COLORS['shapeIncorrect'])
+    # Square attached to right slanted edge
+    draw_square(draw, 290, 335, 50, COLORS['shapeIncorrect'])
 
-    # Answer B - Transformation 2 (square then parallelogram - use same dimensions)
+    # Answer B - Square attached to LEFT side of parallelogram
     draw.rectangle([630, 280, 1180, 430], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([640, 290, 680, 330], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((650, 300), "B", fill=(255, 255, 255), font=None)
-    draw_square(draw, 780, 340, 50, COLORS['shapeIncorrect'])
-    draw_parallelogram(draw, 850, 340, 80, 50, 20, COLORS['shapeIncorrect'])
+    # Parallelogram
+    draw_parallelogram(draw, 810, 340, 80, 50, 20, COLORS['shapeIncorrect'])
+    # Square attached to left edge
+    draw_square(draw, 760, 340, 50, COLORS['shapeIncorrect'])
 
-    # Answer C - Transformation 3 CORRECT (stacked vertically - MUST USE SAME DIMENSIONS)
+    # Answer C - Square attached to BOTTOM edge of parallelogram (CORRECT)
     draw.rectangle([50, 450, 600, 600], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([60, 460, 100, 500], fill=hex_to_rgb(COLORS['shapeCorrect']))
     draw.text((70, 470), "C", fill=(255, 255, 255), font=None)
-    # Use EXACT same dimensions as given shapes: parallelogram (80, 50, 20) and square (50)
+    # Parallelogram on top
     draw_parallelogram(draw, 240, 500, 80, 50, 20, COLORS['shapeCorrect'])
-    draw_square(draw, 260, 560, 50, COLORS['shapeCorrect'])
+    # Square attached to bottom edge (aligned with parallelogram bottom)
+    draw_square(draw, 260, 550, 50, COLORS['shapeCorrect'])
 
-    # Answer D - Transformation 4 (diagonal/offset arrangement - use same dimensions)
+    # Answer D - Square attached to TOP edge of parallelogram
     draw.rectangle([630, 450, 1180, 600], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([640, 460, 680, 500], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((650, 470), "D", fill=(255, 255, 255), font=None)
-    draw_square(draw, 780, 515, 50, COLORS['shapeIncorrect'])
-    draw_parallelogram(draw, 850, 520, 80, 50, -20, COLORS['shapeIncorrect'])
+    # Square on top
+    draw_square(draw, 840, 510, 50, COLORS['shapeIncorrect'])
+    # Parallelogram attached below
+    draw_parallelogram(draw, 840, 560, 80, 50, 20, COLORS['shapeIncorrect'])
 
     img.save('preview-q7.png')
     print("✓ Created preview-q7.png")
