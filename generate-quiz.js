@@ -334,14 +334,15 @@ function drawCircle(slide, x, y, size, color, label = "") {
   }
 }
 
-function drawTriangle(slide, x, y, size, color, label = "") {
+function drawTriangle(slide, x, y, size, color, label = "", flipV = false) {
   slide.addShape("triangle", {
     x: x,
     y: y,
     w: size,
     h: size,
     fill: { color: color },
-    line: { color: "000000", width: 1 }
+    line: { color: "000000", width: 1 },
+    flipV: flipV
   });
 
   if (label) {
@@ -355,6 +356,96 @@ function drawTriangle(slide, x, y, size, color, label = "") {
       align: "center"
     });
   }
+}
+
+function drawHexagon(slide, x, y, size, color, label = "") {
+  // Create hexagon using 6 points
+  const points = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 3) * i - Math.PI / 6;
+    const px = (x + size * Math.cos(angle)) * 914400; // Convert to EMUs
+    const py = (y + size * Math.sin(angle)) * 914400;
+    points.push({ x: px, y: py });
+  }
+
+  // PptxGenJS doesn't have native hexagon, so we approximate with custom shape
+  // For now, use a simple approach: draw it as a custom polygon using rect approximation
+  // We'll create a visual hexagon effect using multiple rectangles
+  const hex_h = size * 0.866; // height of hexagon
+  const hex_w = size;
+
+  // Center rectangle (main body)
+  slide.addShape("rect", {
+    x: x - hex_w * 0.5,
+    y: y - hex_h * 0.25,
+    w: hex_w,
+    h: hex_h * 0.5,
+    fill: { color: color },
+    line: { color: "000000", width: 1 }
+  });
+
+  // Top trapezoid effect
+  slide.addShape("triangle", {
+    x: x - hex_w * 0.5,
+    y: y - hex_h * 0.5,
+    w: hex_w,
+    h: hex_h * 0.25,
+    fill: { color: color },
+    line: { width: 0 },
+    flipV: true
+  });
+
+  // Bottom trapezoid effect
+  slide.addShape("triangle", {
+    x: x - hex_w * 0.5,
+    y: y + hex_h * 0.25,
+    w: hex_w,
+    h: hex_h * 0.25,
+    fill: { color: color },
+    line: { width: 0 }
+  });
+
+  if (label) {
+    slide.addText(label, {
+      x: x - hex_w * 0.5,
+      y: y + hex_h * 0.5 + 0.05,
+      w: hex_w,
+      h: 0.2,
+      fontSize: 10,
+      color: colors.text,
+      align: "center"
+    });
+  }
+}
+
+function drawParallelogram(slide, x, y, width, height, skew, color, label = "") {
+  // Parallelogram using custom points isn't directly supported
+  // Use a rotated rectangle as approximation
+  slide.addShape("rect", {
+    x: x,
+    y: y,
+    w: width,
+    h: height,
+    fill: { color: color },
+    line: { color: "000000", width: 1 },
+    rotate: Math.atan(skew / height) * (180 / Math.PI) // Approximate skew as rotation
+  });
+
+  if (label) {
+    slide.addText(label, {
+      x: x,
+      y: y + height + 0.05,
+      w: width,
+      h: 0.2,
+      fontSize: 10,
+      color: colors.text,
+      align: "center"
+    });
+  }
+}
+
+function drawSquare(slide, x, y, size, color, label = "") {
+  drawRectangle(slide, x, y, size, size, color, label);
 }
 
 // ========================================
@@ -1502,6 +1593,148 @@ function createRevealYesNo(ppt, qNum, question, correctAnswer, nextSlide) {
 // QUESTION 6: Hexagon + Triangle Transformation
 // ========================================
 
+function createQuestion6(ppt) {
+  const slide = ppt.addSlide();
+  slide.background = { color: colors.surface };
+  addQuestionHeader(slide, 6);
+
+  slide.addText("How can you make a different shape using the same parts?", {
+    x: 1.2, y: 0.35, w: 8, h: 0.4, fontSize: 18, color: colors.primary, bold: true
+  });
+
+  // Show given shapes at top
+  slide.addText("Given shapes:", { x: 0.7, y: 0.9, w: 2, h: 0.3, fontSize: 14, color: colors.text, italic: true });
+  drawHexagon(slide, 1.3, 1.3, 0.3, colors.shapeCorrect, "Hexagon");
+  drawTriangle(slide, 2.3, 1.15, 0.4, colors.shapeCorrect, "Triangle");
+
+  const answerY = 2.2, boxHeight = 1.3;
+
+  // Answer A - Triangle on right edge
+  slide.addShape("rect", { x: 0.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("A", { x: 0.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
+  drawHexagon(slide, 2, answerY + 0.6, 0.3, colors.shapeIncorrect);
+  drawTriangle(slide, 2.4, answerY + 0.5, 0.3, colors.shapeIncorrect);
+
+  // Answer B - Triangle on top (CORRECT)
+  slide.addShape("rect", { x: 5.2, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("B", { x: 5.3, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeCorrect }, align: "center", valign: "middle" });
+  drawHexagon(slide, 7.2, answerY + 0.8, 0.3, colors.shapeCorrect);
+  drawTriangle(slide, 7.05, answerY + 0.35, 0.3, colors.shapeCorrect, "", true);
+
+  // Answer C - Triangle on bottom
+  const answerY2 = answerY + boxHeight + 0.2;
+  slide.addShape("rect", { x: 0.5, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("C", { x: 0.6, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
+  drawHexagon(slide, 2, answerY2 + 0.4, 0.3, colors.shapeIncorrect);
+  drawTriangle(slide, 1.85, answerY2 + 0.75, 0.3, colors.shapeIncorrect);
+
+  // Answer D - Triangle on bottom edge
+  slide.addShape("rect", { x: 5.2, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("D", { x: 5.3, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
+  drawHexagon(slide, 7.2, answerY2 + 0.4, 0.3, colors.shapeIncorrect);
+  drawTriangle(slide, 7.05, answerY2 + 0.75, 0.3, colors.shapeIncorrect);
+
+  // Clickable areas
+  [{ x: 0.5, y: answerY }, { x: 5.2, y: answerY }, { x: 0.5, y: answerY2 }, { x: 5.2, y: answerY2 }].forEach(area => {
+    slide.addShape("rect", { ...area, w: 4.2, h: boxHeight, fill: { color: "000000", transparency: 100 }, line: { width: 0 }, hyperlink: { slide: 12 } });
+  });
+}
+
+function createReveal6(ppt) {
+  const slide = ppt.addSlide();
+  slide.background = { color: colors.surface };
+  addRevealHeader(slide, 6);
+
+  slide.addText("How can you make a different shape using the same parts?", {
+    x: 2.2, y: 0.35, w: 7, h: 0.4, fontSize: 18, color: colors.primary, bold: true
+  });
+
+  const answerY = 2.5, boxHeight = 1.3;
+
+  // Answer B - CORRECT (highlighted)
+  slide.addShape("rect", { x: 5.2, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.correctBg }, line: { color: colors.correct, width: 3 } });
+  slide.addText("B", { x: 5.3, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.correct }, align: "center", valign: "middle" });
+  drawHexagon(slide, 7.2, answerY + 0.8, 0.3, colors.shapeCorrect);
+  drawTriangle(slide, 7.05, answerY + 0.35, 0.3, colors.shapeCorrect, "", true);
+
+  // Next button
+  slide.addShape("rect", { x: 7.5, y: 5, w: 2, h: 0.5, fill: { color: colors.secondary }, line: { width: 0 } });
+  slide.addText("Next Question →", { x: 7.5, y: 5, w: 2, h: 0.5, fontSize: 14, bold: true, color: "FFFFFF", align: "center", valign: "middle", hyperlink: { slide: 13 } });
+}
+
+// ========================================
+// QUESTION 7: Parallelogram + Square Transformation
+// ========================================
+
+function createQuestion7(ppt) {
+  const slide = ppt.addSlide();
+  slide.background = { color: colors.surface };
+  addQuestionHeader(slide, 7);
+
+  slide.addText("How can you make a different shape using the same parts?", {
+    x: 1.2, y: 0.35, w: 8, h: 0.4, fontSize: 18, color: colors.primary, bold: true
+  });
+
+  // Show given shapes at top
+  slide.addText("Given shapes:", { x: 0.7, y: 0.9, w: 2, h: 0.3, fontSize: 14, color: colors.text, italic: true });
+  drawParallelogram(slide, 1.1, 1.2, 0.6, 0.4, 0.15, colors.shapeCorrect, "Parallelogram");
+  drawSquare(slide, 2.2, 1.2, 0.4, colors.shapeCorrect, "Square");
+
+  const answerY = 2.2, boxHeight = 1.3;
+
+  // Answer A - Square on right
+  slide.addShape("rect", { x: 0.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("A", { x: 0.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
+  drawParallelogram(slide, 1.5, answerY + 0.5, 0.6, 0.4, 0.15, colors.shapeIncorrect);
+  drawSquare(slide, 2.2, answerY + 0.5, 0.4, colors.shapeIncorrect);
+
+  // Answer B - Square on left
+  slide.addShape("rect", { x: 5.2, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("B", { x: 5.3, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
+  drawSquare(slide, 6.5, answerY + 0.5, 0.4, colors.shapeIncorrect);
+  drawParallelogram(slide, 7.0, answerY + 0.5, 0.6, 0.4, 0.15, colors.shapeIncorrect);
+
+  // Answer C - Stacked vertically (CORRECT)
+  const answerY2 = answerY + boxHeight + 0.2;
+  slide.addShape("rect", { x: 0.5, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("C", { x: 0.6, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeCorrect }, align: "center", valign: "middle" });
+  drawParallelogram(slide, 1.9, answerY2 + 0.4, 0.6, 0.4, 0.15, colors.shapeCorrect);
+  drawSquare(slide, 2.0, answerY2 + 0.85, 0.4, colors.shapeCorrect);
+
+  // Answer D - Square on top
+  slide.addShape("rect", { x: 5.2, y: answerY2, w: 4.2, h: boxHeight, fill: { color: colors.muted }, line: { color: colors.border, width: 1 } });
+  slide.addText("D", { x: 5.3, y: answerY2 + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.shapeIncorrect }, align: "center", valign: "middle" });
+  drawSquare(slide, 7.0, answerY2 + 0.4, 0.4, colors.shapeIncorrect);
+  drawParallelogram(slide, 7.0, answerY2 + 0.85, 0.6, 0.4, 0.15, colors.shapeIncorrect);
+
+  // Clickable areas
+  [{ x: 0.5, y: answerY }, { x: 5.2, y: answerY }, { x: 0.5, y: answerY2 }, { x: 5.2, y: answerY2 }].forEach(area => {
+    slide.addShape("rect", { ...area, w: 4.2, h: boxHeight, fill: { color: "000000", transparency: 100 }, line: { width: 0 }, hyperlink: { slide: 14 } });
+  });
+}
+
+function createReveal7(ppt) {
+  const slide = ppt.addSlide();
+  slide.background = { color: colors.surface };
+  addRevealHeader(slide, 7);
+
+  slide.addText("How can you make a different shape using the same parts?", {
+    x: 2.2, y: 0.35, w: 7, h: 0.4, fontSize: 18, color: colors.primary, bold: true
+  });
+
+  const answerY = 2.5, boxHeight = 1.3;
+
+  // Answer C - CORRECT (highlighted)
+  slide.addShape("rect", { x: 0.5, y: answerY, w: 4.2, h: boxHeight, fill: { color: colors.correctBg }, line: { color: colors.correct, width: 3 } });
+  slide.addText("C", { x: 0.6, y: answerY + 0.1, w: 0.3, h: 0.3, fontSize: 16, bold: true, color: "FFFFFF", fill: { color: colors.correct }, align: "center", valign: "middle" });
+  drawParallelogram(slide, 1.9, answerY + 0.4, 0.6, 0.4, 0.15, colors.shapeCorrect);
+  drawSquare(slide, 2.0, answerY + 0.85, 0.4, colors.shapeCorrect);
+
+  // Next button
+  slide.addShape("rect", { x: 7.5, y: 5, w: 2, h: 0.5, fill: { color: colors.secondary }, line: { width: 0 } });
+  slide.addText("Next Question →", { x: 7.5, y: 5, w: 2, h: 0.5, fontSize: 14, bold: true, color: "FFFFFF", align: "center", valign: "middle", hyperlink: { slide: 15 } });
+}
+
 function create4OptionGeneric(ppt, qNum, question, options, correctIndex, revealSlide, nextSlide) {
   // Question slide
   const qSlide = ppt.addSlide();
@@ -1632,13 +1865,13 @@ createReveal4(ppt);
 createQuestionYesNo(ppt, 5, "Can the parts of Shape A be used to make Shape B?", "No", 10, true);
 createRevealYesNo(ppt, 5, "Can the parts of Shape A be used to make Shape B?", "No", 11);
 
-// Q6 - Transformation: Hexagon + Triangle (Answer: B)
-create4OptionGeneric(ppt, 6, "How can you make a different shape using the same parts? (Hexagon + Triangle)",
-  ["Transformation 1", "Transformation 2 (Correct)", "Transformation 3", "Transformation 4"], 1, 12, 13);
+// Q6 + R6 - Transformation: Hexagon + Triangle (Answer: B)
+createQuestion6(ppt);
+createReveal6(ppt);
 
-// Q7 - Transformation: Parallelogram + Square (Answer: C)
-create4OptionGeneric(ppt, 7, "How can you make a different shape using the same parts? (Parallelogram + Square)",
-  ["Transformation 1", "Transformation 2", "Transformation 3 (Correct)", "Transformation 4"], 2, 14, 15);
+// Q7 + R7 - Transformation: Parallelogram + Square (Answer: C)
+createQuestion7(ppt);
+createReveal7(ppt);
 
 // Q8 - Yes/No Decomposition (Answer: A/Yes)
 createQuestionYesNo(ppt, 8, "Can the parts of Shape A be used to make Shape B? (Diamond shape)", "Yes", 16);
