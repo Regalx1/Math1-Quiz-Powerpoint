@@ -91,13 +91,17 @@ def create_q6_preview():
     draw_hexagon(draw, 250, 350, 30, COLORS['shapeIncorrect'])
     draw_triangle(draw, 340, 330, 45, COLORS['shapeIncorrect'])
 
-    # Answer B - Transformation 2 CORRECT (triangle on top of hexagon)
+    # Answer B - Transformation 2 CORRECT (triangle on top of hexagon, touching not clipping)
     draw.rectangle([630, 280, 1180, 430], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([640, 290, 680, 330], fill=hex_to_rgb(COLORS['shapeCorrect']))
-    draw.text([650, 300], "B", fill=(255, 255, 255), font=None)
+    draw.text((650, 300), "B", fill=(255, 255, 255), font=None)
+    # Hexagon centered
     draw_hexagon(draw, 850, 370, 30, COLORS['shapeCorrect'])
-    draw_triangle(draw, 820, 320, 60, COLORS['shapeCorrect'])
+    # Triangle positioned above hexagon - bottom edge touching top of hexagon
+    # Hexagon top is at y=370-30=340, triangle height is ~52 (60*sqrt(3)/2)
+    # So triangle should start at y=340-52=288
+    draw_triangle(draw, 820, 288, 60, COLORS['shapeCorrect'])
 
     # Answer C - Transformation 3 (triangle below hexagon)
     draw.rectangle([50, 450, 600, 600], fill=hex_to_rgb(COLORS['muted']),
@@ -136,37 +140,38 @@ def create_q7_preview():
     draw_square(draw, 320, 130, 50, COLORS['shapeCorrect'])
     draw.text((325, 200), "Square", fill=hex_to_rgb(COLORS['text']), font=None)
 
-    # Answer A - Transformation 1
+    # Answer A - Transformation 1 (horizontal arrangement - use same dimensions)
     draw.rectangle([50, 280, 600, 430], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([60, 290, 100, 330], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((70, 300), "A", fill=(255, 255, 255), font=None)
-    draw_parallelogram(draw, 220, 340, 70, 45, 15, COLORS['shapeIncorrect'])
-    draw_square(draw, 310, 340, 45, COLORS['shapeIncorrect'])
+    draw_parallelogram(draw, 200, 340, 80, 50, 20, COLORS['shapeIncorrect'])
+    draw_square(draw, 300, 340, 50, COLORS['shapeIncorrect'])
 
-    # Answer B - Transformation 2
+    # Answer B - Transformation 2 (square then parallelogram - use same dimensions)
     draw.rectangle([630, 280, 1180, 430], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([640, 290, 680, 330], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((650, 300), "B", fill=(255, 255, 255), font=None)
-    draw_square(draw, 800, 340, 45, COLORS['shapeIncorrect'])
-    draw_parallelogram(draw, 860, 340, 70, 45, 15, COLORS['shapeIncorrect'])
+    draw_square(draw, 780, 340, 50, COLORS['shapeIncorrect'])
+    draw_parallelogram(draw, 850, 340, 80, 50, 20, COLORS['shapeIncorrect'])
 
-    # Answer C - Transformation 3 CORRECT (stacked vertically)
+    # Answer C - Transformation 3 CORRECT (stacked vertically - MUST USE SAME DIMENSIONS)
     draw.rectangle([50, 450, 600, 600], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([60, 460, 100, 500], fill=hex_to_rgb(COLORS['shapeCorrect']))
     draw.text((70, 470), "C", fill=(255, 255, 255), font=None)
-    draw_parallelogram(draw, 250, 500, 70, 45, 15, COLORS['shapeCorrect'])
-    draw_square(draw, 270, 550, 45, COLORS['shapeCorrect'])
+    # Use EXACT same dimensions as given shapes: parallelogram (80, 50, 20) and square (50)
+    draw_parallelogram(draw, 240, 500, 80, 50, 20, COLORS['shapeCorrect'])
+    draw_square(draw, 260, 560, 50, COLORS['shapeCorrect'])
 
-    # Answer D - Transformation 4
+    # Answer D - Transformation 4 (diagonal/offset arrangement - use same dimensions)
     draw.rectangle([630, 450, 1180, 600], fill=hex_to_rgb(COLORS['muted']),
                    outline=hex_to_rgb(COLORS['border']), width=2)
     draw.rectangle([640, 460, 680, 500], fill=hex_to_rgb(COLORS['shapeIncorrect']))
     draw.text((650, 470), "D", fill=(255, 255, 255), font=None)
-    draw_square(draw, 800, 515, 45, COLORS['shapeIncorrect'])
-    draw_parallelogram(draw, 860, 520, 70, 45, -15, COLORS['shapeIncorrect'])
+    draw_square(draw, 780, 515, 50, COLORS['shapeIncorrect'])
+    draw_parallelogram(draw, 850, 520, 80, 50, -20, COLORS['shapeIncorrect'])
 
     img.save('preview-q7.png')
     print("✓ Created preview-q7.png")
